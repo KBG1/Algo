@@ -1,95 +1,85 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {
-    static int N, M, ans;
-    static int[][] tomato;
-    static int[] dr = new int[] { -1, 1, 0, 0 };
-    static int[] dc = new int[] { 0, 0, -1, 1 }; // 상하좌우
-    static Deque<Node> queue;
+class Point {
+    int r, c;
 
-    static class Node {
-        int r;
-        int c;
-
-        public Node(int r, int c) {
-            this.r = r;
-            this.c = c;
-        }
+    public Point() {
+        super();
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        queue = new ArrayDeque<>();
+    public Point(int r, int c) {
+        super();
+        this.r = r;
+        this.c = c;
+    }
 
+}
+
+public class Main {
+
+    public static int N, M, zeroCount, answer;
+    public static int[][] map, visited;
+    public static Queue<Point> q;
+    public static int[] dr = { -1, 1, 0, 0 };
+    public static int[] dc = { 0, 0, -1, 1 };
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
         M = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
-        tomato = new int[N][M];
-        ans = 0;
+        map = new int[N][M];
+        visited = new int[N][M];
+        q = new LinkedList<>();
+        zeroCount = 0;
+
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < M; j++) {
-                tomato[i][j] = Integer.parseInt(st.nextToken());
-            }
-        }
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (tomato[i][j] == 1) {
-                    Node node = new Node(i, j);
-                    queue.add(node);
+                map[i][j] = Integer.parseInt(st.nextToken());
+                if (map[i][j] == 0) {
+                    zeroCount++;
+                } else if (map[i][j] == 1) {
+                    visited[i][j] = 1;
+                    q.offer(new Point(i, j));
                 }
             }
         }
+
         bfs();
         
-        for(int i = 0; i < N; i++) {
-        	for(int j = 0 ; j< M; j++) {
-        		if(tomato[i][j] == 0) {
-        			System.out.println(-1);
-        			System.exit(0);
-        		}
-        		
-        		ans = Math.max(ans, tomato[i][j]);
-        	}
-        }
-        
-        if(ans == 1) {
-        	System.out.println(0);
-        }
-        else {
-        	System.out.println(ans - 1);
-        }
-        
-  
+        answer = zeroCount == 0 ? answer : -1;
+        System.out.println(answer);
         
     }
 
-    public static void bfs() {
+    static void bfs() {
 
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                Node n = queue.poll();
-                for (int d = 0; d < 4; d++) {
-                    int nr = n.r + dr[d];
-                    int nc = n.c + dc[d];
-                    if (nr >= 0 && nr < N && nc >= 0 && nc < M) {
-                        if (tomato[nr][nc] == 0) {
-                            
-                            queue.add(new Node(nr, nc));// 노드 탐방
-                            tomato[nr][nc] = tomato[n.r][n.c]+ 1; 
-                        }
+        answer = -1;
+        while (!q.isEmpty()) {
+            answer++;
+            int size = q.size();
+            for (int s = 0; s < size; s++) {
+                Point p = q.poll();
+                for (int i = 0; i < 4; i++) {
+                    int nextR = p.r + dr[i];
+                    int nextC = p.c + dc[i];
+                    
+                    if(nextR < 0 || nextC < 0 || nextR >= N || nextC >= M || map[nextR][nextC] != 0 || visited[nextR][nextC] == 1) {
+                        continue;
                     }
+                    
+                    visited[nextR][nextC] = 1;
+                    zeroCount--;
+                    q.offer(new Point(nextR, nextC));
                 }
             }
-            
         }
     }
-
 }
