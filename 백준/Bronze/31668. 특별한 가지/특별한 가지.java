@@ -1,1 +1,1 @@
-import java.util.*;public class Main{public static void main(String[] args){Scanner sc=new Scanner(System.in);int N=sc.nextInt();System.out.println((sc.nextInt()/N)*sc.nextInt());}}
+interface Main{static void main(String[]a){var s=new java.util.Scanner(System.in);var n=s.nextInt();System.out.print(s.nextInt()/n*s.nextInt());}}
