@@ -1,1 +1,1 @@
-interface Main{static void main(String[]a){var s=new java.util.Scanner(System.in);var n=s.nextInt();System.out.print(s.nextInt()/n*s.nextInt());}}
+interface Main{static void main(String[] a){var s=new java.util.Scanner(System.in);int n=s.nextInt();System.out.print(s.nextInt()/n*s.nextInt());}}
