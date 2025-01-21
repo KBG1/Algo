@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static Set<String> drPoints;
+    static Set<Point> drPoints;
     static int N, x, y, d, g;
 
     // x좌표 증가 (y, x + 1);
@@ -41,26 +41,18 @@ public class Main {
 
         int cnt = 0;
 
-        for (String str : drPoints) {
-            // 각 요소를 돌면서, 쌍이 되는지 확인한다.
-            // 되는 조건 : 네 점의 쌍이 모두 drPoints안에 있어야함.
-            String[] numStrings = str.split(",");
-
-            int x = Integer.parseInt(numStrings[0]);
-            int y = Integer.parseInt(numStrings[1]);
-            
-
-            if (drPoints.contains(((x + 1) + "," + y)) && 
-                drPoints.contains((x + "," + (y + 1))) &&
-                drPoints.contains(((x + 1) + "," + (y + 1)))){
+        for (Point p : drPoints) {
+            int x = p.x;
+            int y = p.y;
+            // 사각형을 확인할 때, 네 점을 한번에 확인
+            if (drPoints.contains(new Point(x + 1, y)) && 
+                drPoints.contains(new Point(x, y + 1)) &&
+                drPoints.contains(new Point(x + 1, y + 1))) {
                 cnt++;
             }
-
-            
         }
 
         System.out.println(cnt);
-
     }
 
     public static void dragonCurve(int x, int y, int d, int g) {
@@ -78,15 +70,37 @@ public class Main {
         }
 
         // 첫 점을 추가하고
-        drPoints.add(x + "," + y);
+        drPoints.add(new Point(x, y));
         int nx = x;
         int ny = y;
         for (int dir : directions) {
-            // 하나씩 전환해주면서 점 추가하기기
+            // 하나씩 전환해주면서 점 추가하기
             nx += dx[dir];
             ny += dy[dir];
-            drPoints.add(nx + "," + ny);
+            drPoints.add(new Point(nx, ny));
+        }
+    }
+
+    static class Point {
+        int x, y;
+
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
 
+        // Set에서 사용하는 hashCode와 equals 재정의
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            Point point = (Point) obj;
+            return x == point.x && y == point.y;
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * x + y;
+        }
     }
 }
