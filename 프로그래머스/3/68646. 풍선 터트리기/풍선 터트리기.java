@@ -11,7 +11,7 @@ class Solution {
             if(lMin > rMin){
                 l++;
                 
-                //좌보다 우가 더 큰경우 터트림
+                //좌가 더 큰경우 터트림
                 if(a[l] < lMin){
                     answer++;
                 }
