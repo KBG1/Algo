@@ -11,13 +11,14 @@ function solution(schedules, timelogs, startday) {
         for(let i = 0; i < 7; i++){
             let time = (Math.floor(timelogs[idx][i] / 100) * 60) + (timelogs[idx][i] % 100);
             //3. 지각을 하면, 바로 out (토, 일 제외)
-            if(time - scheduleTime > 10 && (startday <= 5)){
+            if(time - scheduleTime > 10 && (day <= 5)){
                 late = true;
+                break;
             }
             //4. startday를 증가시키면서 값 계속 비교
-            startday++;
-            if(startday === 8){
-                startday = 1;
+            day++;
+            if(day === 8){
+                day = 1;
             }
         }
         //5. 지각 안했으면 선물
