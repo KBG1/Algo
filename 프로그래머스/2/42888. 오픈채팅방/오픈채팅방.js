@@ -1,10 +1,12 @@
 function solution(record) {
     let user = new Map();
+    a = record.map((v) => v.split(" "));
+    console.log(a);
     
     
     record.forEach((info) => {
         const [state, id, nickname] = info.split(" ");
-        if(state === "Enter" || state === "Change"){
+        if(nickname){
             user.set(id, nickname);    
         }
     })
